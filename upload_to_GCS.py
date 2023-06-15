@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     started_time = datetime.datetime.now()
 
-    project_path = '/home/ngkhachuy/PROJECT/DEC_PJ5_GCP/'
+    project_path = '/home/nkh_nguyenhuy961127/DEC_PJ5_GCP/'
     logger = COMMON.get_log(project_path + 'log/upload.log')
 
     logger.info(f'STARTED TIME: {started_time}')
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     os.environ['GOOGLE_CLOUD_PROJECT'] = 'sage-mind-388000'
     bucket_name = 'test_script_nkh'
     try:
-        full_path = '/media/ngkhachuy/KhacHuy/PROJECT/DEC/DEC_PJ5_GCP/export/'
+        full_path = '/home/nkh_nguyenhuy961127/DEC_PJ5_GCP/export/'
         fname = 'product.json'
 
         storage_client = storage.Client()

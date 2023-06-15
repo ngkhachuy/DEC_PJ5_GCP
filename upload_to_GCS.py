@@ -1,5 +1,6 @@
 import datetime
 import os
+import sys
 import traceback
 
 from google.cloud import storage
@@ -17,13 +18,14 @@ if __name__ == "__main__":
     logger.info(f'STARTED TIME: {started_time}')
     print(f'STARTED TIME: {started_time}')
 
-    # Config credentials file (json) as Enviroment Variable 'GOOGLE_APPLICATION_CREDENTIALS'
-    # os.environ['GOOGLE_CLOUD_PROJECT'] = 'path-to-json-file'
-    os.environ['GOOGLE_CLOUD_PROJECT'] = 'sage-mind-388000'
-    bucket_name = 'test_script_nkh'
     try:
+        # Config credentials file (json) as Enviroment Variable 'GOOGLE_APPLICATION_CREDENTIALS'
+        # os.environ['GOOGLE_CLOUD_PROJECT'] = 'path-to-json-file'
+        os.environ['GOOGLE_CLOUD_PROJECT'] = 'sage-mind-388000'
+        bucket_name = sys.argv[2]
+
         full_path = '/home/nkh_nguyenhuy961127/DEC_PJ5_GCP/export/'
-        fname = 'product.json'
+        fname = sys.argv[1]
 
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)

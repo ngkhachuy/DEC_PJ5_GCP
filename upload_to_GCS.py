@@ -11,8 +11,8 @@ import COMMON
 if __name__ == "__main__":
 
     started_time = datetime.datetime.now()
-
-    project_path = '/home/nkh_nguyenhuy961127/DEC_PJ5_GCP/'
+    home_path = os.environ['HOME']
+    project_path = home_path + '/PROJECT/DEC_PJ5_GCP/'
     logger = COMMON.get_log(project_path + 'log/upload.log')
 
     logger.info(f'STARTED TIME: {started_time}')
@@ -24,18 +24,17 @@ if __name__ == "__main__":
         os.environ['GOOGLE_CLOUD_PROJECT'] = 'sage-mind-388000'
         bucket_name = sys.argv[2]
 
-        full_path = '/home/nkh_nguyenhuy961127/DEC_PJ5_GCP/export/'
         fname = sys.argv[1]
 
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)
-        blob = bucket.blob(fname)
+        blob = bucket.blob(fname.split("/")[-1])
 
         blob.chunk_size = 1024 * 1024 * 1024 * 50  # 50GB
-        blob.upload_from_filename(full_path + fname, if_generation_match=0)
+        blob.upload_from_filename(fname, if_generation_match=0)
 
-        logger.info(f"File [{full_path + fname}] uploaded to [{fname}] in bucket [{bucket_name}].")
-        print(f"File [{full_path + fname}] uploaded to [{fname}] in bucket [{bucket_name}].")
+        logger.info(f"File [{fname}] uploaded to bucket [{bucket_name}].")
+        print(f"File [{fname}] uploaded to bucket [{bucket_name}].")
 
         logger.info(f'FINISHED TIME: {datetime.datetime.now()}')
         print(f'FINISHED TIME: {datetime.datetime.now()}')

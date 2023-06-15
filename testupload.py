@@ -24,7 +24,11 @@ if __name__ == "__main__":
         os.environ['GOOGLE_CLOUD_PROJECT'] = 'sage-mind-388000'
         bucket_name = 'test_script_nkh'
 
-        fname = 'requirement.txt'
+        now = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        with open('txt/test_%s.txt' % now, 'w') as f:
+            f.write(now)
+
+        fname = 'txt/test_%s.txt' % now
 
         storage_client = storage.Client()
         bucket = storage_client.bucket(bucket_name)

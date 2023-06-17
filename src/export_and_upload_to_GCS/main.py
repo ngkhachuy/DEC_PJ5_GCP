@@ -1,22 +1,18 @@
-import datetime
-import json
 import os
-import subprocess
 import sys
+import json
+import datetime
+import subprocess
 
 import pymongo
 
-from src import COMMON
+from src.COMMON import get_log, print_execution_time, MONGODB_LOCALHOST, MONGODB_DB_NAME
 
 
 def export_to_jsonl():
 
-    export_logger = COMMON.get_log(project_path + 'log/export.log')
-    export_logger.info("STARTED TIME: %s" % datetime.datetime.now())
-
-    # URI MongoDB Server
-    MONGODB_LOCALHOST = "mongodb://localhost:27017/"
-    MONGODB_DB_NAME = "TIKI_NEW"
+    export_logger = get_log(project_path + 'log/export.log')
+    export_logger.info("Start exporting at: %s" % datetime.datetime.now())
 
     # Connect to MongoDB
     mongo_server = pymongo.MongoClient(MONGODB_LOCALHOST)
@@ -43,13 +39,13 @@ def export_to_jsonl():
     export_logger.info('Exported: %i products!' % len(list(products)))
     op_product.close()
 
-    export_logger.info("FINISHED TIME: %s" % datetime.datetime.now())
+    print_execution_time(export_logger, start_time)
 
 
 def upload_to_gcs(upload_src, dest_file):
 
-    upload_logger = COMMON.get_log(project_path + 'log/upload.log')
-    upload_logger.info("STARTED TIME: %s" % datetime.datetime.now())
+    upload_logger = get_log(project_path + 'log/upload.log')
+    upload_logger.info("Start uploading at: %s" % datetime.datetime.now())
     upload_logger.info("Uploading file %s to bucket %s" % (upload_src, dest_file))
 
     # Using parallel when uploading more than 150MB
@@ -63,7 +59,7 @@ def upload_to_gcs(upload_src, dest_file):
         upload_logger.info("UPLOADED SUCCESSFULLY")
         upload_logger.info("File [%s] UPLOADED TO BUCKET [%s]." % (upload_src, dest_file))
 
-    upload_logger.info("FINISHED TIME: %s" % datetime.datetime.now())
+    print_execution_time(upload_logger, start_time)
 
 
 if __name__ == '__main__':

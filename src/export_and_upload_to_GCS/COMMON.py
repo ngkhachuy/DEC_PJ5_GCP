@@ -20,3 +20,13 @@ def get_log(file_log):
                         datefmt='%d-%m-%Y %H:%M:%S',
                         level=logging.INFO)
     return logging.getLogger()
+
+
+def close_logger(logger):
+    """Close all handlers on logger object."""
+    if logger is None:
+        return
+    for handler in list(logger.handlers):
+        handler.close()
+        logger.removeHandler(handler)
+

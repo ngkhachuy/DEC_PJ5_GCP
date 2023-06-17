@@ -28,7 +28,7 @@ def export_to_jsonl():
         export_logger.info("Export from: %s%s" % (COMMON.MONGODB_LOCALHOST, COMMON.MONGODB_DB_NAME))
 
         categories = mongo_coll_category.find({})
-        categories_count = mongo_coll_category.count_documents()
+        categories_count = mongo_coll_category.count_documents({})
         for cat in categories:
             cat['_id'] = str(cat['_id'])
             cat['crawled_time'] = str(cat['crawled_time'])
@@ -36,7 +36,7 @@ def export_to_jsonl():
         export_logger.info('Exported: %i categories!' % categories_count)
 
         products = mongo_coll_product.find({})
-        products_count = mongo_coll_product.count_documents()
+        products_count = mongo_coll_product.count_documents({})
         for prod in products:
             prod['_id'] = str(prod['_id'])
             prod['crawled_time'] = str(prod['crawled_time'])
@@ -49,6 +49,7 @@ def export_to_jsonl():
         out_put_category.close()
         out_put_product.close()
         COMMON.print_execution_time(export_logger, start_time)
+        COMMON.close_logger(export_logger)
 
 
 def upload_to_gcs(upload_src):
@@ -58,10 +59,10 @@ def upload_to_gcs(upload_src):
 
     try:
         upload_logger.info("Start uploading at: %s" % datetime.datetime.now())
-        upload_logger.info("Uploading file %s to bucket %s" % (upload_src, bucket_name))
+        upload_logger.info("Uploading file %s to bucket gs://%s" % (upload_src, bucket_name))
 
         # Using parallel when uploading more than 150MB
-        cmd = 'gsutil -o GSUtil:parallel_composite_upload_threshold=150M -m -cp %s gs://%s' % (upload_src, bucket_name)
+        cmd = 'gsutil -o GSUtil:parallel_composite_upload_threshold=150M -m cp %s gs://%s' % (upload_src, bucket_name)
         # Execute Command
         result = subprocess.run(cmd, shell=True, bufsize=1, capture_output=True, text=True)
         if result.returncode != 0:
@@ -75,6 +76,7 @@ def upload_to_gcs(upload_src):
         upload_logger.error(traceback.format_exc())
     finally:
         COMMON.print_execution_time(upload_logger, start_time)
+        COMMON.close_logger(upload_logger)
 
 
 if __name__ == '__main__':

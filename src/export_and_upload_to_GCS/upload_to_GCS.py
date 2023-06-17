@@ -3,9 +3,14 @@ import os
 import sys
 import subprocess
 
-import COMMON
+from src import COMMON
 
 if __name__ == '__main__':
+
+    # Upload file/folder to GCS Bucket
+    # Parameter
+    #     1. File path: File or Folder to upload to GCS
+    #     2. Bucket name: Destination Bucket in GCS
 
     started_time = datetime.datetime.now()
     home_path = os.environ['HOME']
@@ -14,14 +19,17 @@ if __name__ == '__main__':
 
     logger.info("STARTED TIME: %s" % started_time)
 
-    cmd_action = ''
+    # [PARAMETER] 1. File path: File or Folder to upload to GCS
     upload_src = sys.argv[1]
+    # Check is file or folder
     if os.path.isfile(upload_src):
         cmd_action = '-m cp'
         src_type = 'File'
     else:
         cmd_action = '-m cp -r'
         src_type = 'Folder'
+
+    # [PARAMETER] 2. Bucket name: Destination Bucket in GCS
     bucket_name = sys.argv[2]
 
     logger.info("Uploading %s %s to bucket %s" % (src_type, upload_src, bucket_name))
@@ -30,6 +38,7 @@ if __name__ == '__main__':
     cmd = 'gsutil -o GSUtil:parallel_composite_upload_threshold=150M %s %s gs://%s' % (cmd_action,
                                                                                        upload_src,
                                                                                        bucket_name)
+    # Execute Command
     result = subprocess.run(cmd, shell=True, bufsize=1, capture_output=True, text=True)
     if result.returncode != 0:
         logger.error("UPLOAD FAILED")

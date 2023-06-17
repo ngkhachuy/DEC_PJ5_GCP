@@ -18,7 +18,7 @@ if __name__ == '__main__':
     mongo_coll_category = mongo_db["category"]
 
     categories = mongo_coll_category.find({}, {"_id": 0})
-    op_category = open('export/category_%s.json' % execution_time.strftime("%Y%m%d_%H%M%S"), 'a')
+    op_category = open('export/category_%s.json' % execution_time.strftime("%Y%m%d%H%M%S"), 'a')
     cnt_cat = 1
     for cat in categories:
         cat['crawled_time'] = str(cat['crawled_time'])
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     op_category.close()
 
     products = mongo_coll_product.find({})
-    op_product = open('export/product_%s.json' % execution_time.strftime("%Y%m%d_%H%M%S"), 'a')
+    op_product = open('export/product_%s.json' % execution_time.strftime("%Y%m%d%H%M%S"), 'a')
     cnt_prod = 1
     for prod in products:
         prod['_id'] = str(prod['_id'])

@@ -1,9 +1,9 @@
-import datetime
 import os
 import sys
+import datetime
 import subprocess
 
-from src import COMMON
+import COMMON
 
 if __name__ == '__main__':
 
@@ -15,6 +15,7 @@ if __name__ == '__main__':
     started_time = datetime.datetime.now()
     home_path = os.environ['HOME']
     project_path = home_path + '/PROJECT/DEC_PJ5_GCP/'
+
     logger = COMMON.get_log(project_path + 'log/upload.log')
 
     logger.info("STARTED TIME: %s" % started_time)

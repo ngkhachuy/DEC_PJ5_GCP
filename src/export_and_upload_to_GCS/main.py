@@ -6,20 +6,20 @@ import subprocess
 
 import pymongo
 
-from src.COMMON import get_log, print_execution_time, MONGODB_LOCALHOST, MONGODB_DB_NAME
+import COMMON
 
 
 def export_to_jsonl():
 
-    export_logger = get_log(project_path + 'log/export.log')
+    export_logger = COMMON.get_log(project_path + 'log/export.log')
     export_logger.info("Start exporting at: %s" % datetime.datetime.now())
 
     # Connect to MongoDB
-    mongo_server = pymongo.MongoClient(MONGODB_LOCALHOST)
-    mongo_db = mongo_server[MONGODB_DB_NAME]
+    mongo_server = pymongo.MongoClient(COMMON.MONGODB_LOCALHOST)
+    mongo_db = mongo_server[COMMON.MONGODB_DB_NAME]
     mongo_coll_product = mongo_db["product"]
     mongo_coll_category = mongo_db["category"]
-    export_logger.info("Export from: %s%s" % (MONGODB_LOCALHOST, MONGODB_DB_NAME))
+    export_logger.info("Export from: %s%s" % (COMMON.MONGODB_LOCALHOST, COMMON.MONGODB_DB_NAME))
 
     categories = mongo_coll_category.find({})
     op_category = open('export/category_%s.json' % start_time.strftime("%Y%m%d%H%M%S"), 'a')
@@ -39,12 +39,12 @@ def export_to_jsonl():
     export_logger.info('Exported: %i products!' % len(list(products)))
     op_product.close()
 
-    print_execution_time(export_logger, start_time)
+    COMMON.print_execution_time(export_logger, start_time)
 
 
 def upload_to_gcs(upload_src, dest_file):
 
-    upload_logger = get_log(project_path + 'log/upload.log')
+    upload_logger = COMMON.get_log(project_path + 'log/upload.log')
     upload_logger.info("Start uploading at: %s" % datetime.datetime.now())
     upload_logger.info("Uploading file %s to bucket %s" % (upload_src, dest_file))
 
@@ -59,7 +59,7 @@ def upload_to_gcs(upload_src, dest_file):
         upload_logger.info("UPLOADED SUCCESSFULLY")
         upload_logger.info("File [%s] UPLOADED TO BUCKET [%s]." % (upload_src, dest_file))
 
-    print_execution_time(upload_logger, start_time)
+    COMMON.print_execution_time(upload_logger, start_time)
 
 
 if __name__ == '__main__':

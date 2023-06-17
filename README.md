@@ -26,3 +26,9 @@
 - Example command: `python [project_path]/src/export_and_upload_to_GCS/main.py [bucket_name]`
 
 ### **Workflow**
+
+## 3. Load Data to BigQuery by Google Cloud Function
+- Source code:
+  - [main.py](src/load_data_to_BQ/main.py)
+  - [requirement.txt](src/load_data_to_BQ/requirement.txt)
+- Create Function

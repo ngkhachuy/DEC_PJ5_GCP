@@ -22,21 +22,23 @@ def export_to_jsonl():
     export_logger.info("Export from: %s%s" % (COMMON.MONGODB_LOCALHOST, COMMON.MONGODB_DB_NAME))
 
     categories = mongo_coll_category.find({})
+    categories_count = len(list(categories))
     op_category = open('export/category_%s.json' % start_time.strftime("%Y%m%d%H%M%S"), 'a')
     for cat in categories:
         cat['_id'] = str(cat['_id'])
         cat['crawled_time'] = str(cat['crawled_time'])
         op_category.write(json.dumps(cat) + "\n")
-    export_logger.info('Exported: %i categories!' % len(list(categories)))
+    export_logger.info('Exported: %i categories!' % categories_count)
     op_category.close()
 
     products = mongo_coll_product.find({})
+    products_count = len(list(products))
     op_product = open('export/product_%s.json' % start_time.strftime("%Y%m%d%H%M%S"), 'a')
     for prod in products:
         prod['_id'] = str(prod['_id'])
         prod['crawled_time'] = str(prod['crawled_time'])
         op_product.write(json.dumps(prod) + "\n")
-    export_logger.info('Exported: %i products!' % len(list(products)))
+    export_logger.info('Exported: %i products!' % products_count)
     op_product.close()
 
     COMMON.print_execution_time(export_logger, start_time)

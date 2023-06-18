@@ -30,16 +30,16 @@ def export_to_jsonl():
         categories = mongo_coll_category.find({})
         categories_count = mongo_coll_category.count_documents({})
         for cat in categories:
-            cat['_id'] = str(cat['_id'])
-            cat['crawled_time'] = str(cat['crawled_time'])
+            cat['_id'] = str(cat['_id'])                    # Change ObjectID of Mongo to String
+            cat['crawled_time'] = str(cat['crawled_time'])  # Change Date to String
             out_put_category.write(json.dumps(cat) + "\n")
         export_logger.info('Exported: %i categories!' % categories_count)
 
         products = mongo_coll_product.find({})
         products_count = mongo_coll_product.count_documents({})
         for prod in products:
-            prod['_id'] = str(prod['_id'])
-            prod['crawled_time'] = str(prod['crawled_time'])
+            prod['_id'] = str(prod['_id'])                    # Change ObjectID of Mongo to String
+            prod['crawled_time'] = str(prod['crawled_time'])  # Change Date to String
             out_put_product.write(json.dumps(prod) + "\n")
         export_logger.info('Exported: %i products!' % products_count)
     except Exception as e:

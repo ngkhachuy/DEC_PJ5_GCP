@@ -17,7 +17,6 @@ if __name__ == '__main__':
     project_path = home_path + '/PROJECT/DEC_PJ5_GCP/'
 
     logger = COMMON.get_log(project_path + 'log/upload.log')
-
     logger.info("STARTED TIME: %s" % started_time)
 
     # [PARAMETER] 1. File path: File or Folder to upload to GCS

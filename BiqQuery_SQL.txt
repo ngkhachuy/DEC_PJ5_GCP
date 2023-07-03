@@ -1,0 +1,26 @@
+DROP TABLE IF EXISTS `TIKI_NEW.seller`;
+CREATE TABLE `TIKI_NEW.seller` AS
+SELECT
+  p.current_seller.id,
+  p.current_seller.name,
+  ARRAY_AGG(STRUCT(p.id, 
+					p.name, p.price, p.breadcrumbs, p.short_url, 
+					p.specifications, p.all_time_quantity_sold, p.rating_average)) AS product
+FROM `TIKI_NEW.product` AS p
+GROUP BY p.current_seller.id, p.current_seller.name;
+
+
+
+DROP TABLE IF EXISTS `TIKI_NEW.root_categories_quantity`;
+CREATE TABLE
+  `TIKI_NEW.root_categories_quantity` AS
+WITH 
+tbl AS (SELECT
+  p.id AS P_ID,
+  b.category_id AS CAT_ID, b.name AS CAT_NAME,
+  row_number() over (partition by p.id) as LV
+FROM
+  `TIKI_NEW.product` AS p,
+  UNNEST(p.breadcrumbs) AS b)
+
+SELECT P_ID, CAT_ID, CAT_NAME from tbl WHERE LV = 1;
